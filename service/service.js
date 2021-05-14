@@ -23,13 +23,13 @@ exports.getAnimeById = async (req, res, next) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-module.createAnime = async (req, res, next) => {
+exports.createAnime = async (req, res, next) => {
 	const animeData = await Anime.create(req.body);
 	response.success(res, 201, animeData);
 };
 
 // eslint-disable-next-line no-unused-vars
-module.updateAnime = async (req, res, next) => {
+exports.updateAnime = async (req, res, next) => {
 	const anime = await Anime.findByIdAndUpdate(req.params.id, req.body, {
 		new: true,
 		runValidators: true,
@@ -37,7 +37,7 @@ module.updateAnime = async (req, res, next) => {
 	response.success(res, 200, anime);
 };
 
-module.deleteAnime = async (req, res, next) => {
+exports.deleteAnime = async (req, res, next) => {
 	const anime = await Anime.findByIdAndDelete(req.params.id);
 
 	if (!anime) return next(new ApiError(`Id not found`, 404));
