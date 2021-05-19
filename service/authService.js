@@ -3,7 +3,7 @@ const response = require('../models/response');
 const ApiError = require('../utils/appError');
 const jwt = require('jsonwebtoken');
 
-const singToken = (id) => {
+const signToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
 		expiresIn: process.env.JWT_EXPIRES_IN,
 	});
@@ -18,7 +18,7 @@ exports.singup = async (req, res, next) => {
 		passwordConfirm: req.body.passwordConfirm,
 	});
 
-	const token = singToken(newUser.id);
+	const token = signToken(newUser.id);
 
 	response.success(res, 201, newUser, token);
 };
@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
 		return next(new ApiError('Invalid email or password', 401));
 	}
 
-	const token = singToken(user._id);
+	const token = signToken(user._id);
 
 	res.status(200).json({
 		status: 'Success!',
