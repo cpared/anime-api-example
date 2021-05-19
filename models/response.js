@@ -1,6 +1,7 @@
-exports.success = (res, statusCode, data) => {
+exports.success = (res, statusCode, data, token = undefined) => {
 	return res.status(statusCode).json({
 		status: 'Success!',
+		token: token,
 		data: data,
 	});
 };

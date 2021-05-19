@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
 
-app.use('/api/v1', animeRouters);
-app.use('/api/v1', userRouters);
+app.use('/api/v1/animes', animeRouters);
+app.use('/api/v1/user', userRouters);
 
 app.all('*', (req, res, next) => {
 	next(new AppError(`Route ${req.originalUrl} not found`), 404);

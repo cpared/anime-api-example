@@ -4,12 +4,12 @@ const controller = require('../controllers/animeController');
 const router = express.Router();
 
 router
-	.route('/animes')
+	.route('/')
 	.get(controller.getAnimes)
 	.post(controller.createAnime);
 
 router
-	.route('/animes/:id')
+	.route('/:id')
 	.get(controller.getAnimeById)
 	.put(controller.updateAnime)
 	.delete(controller.deleteAnime);

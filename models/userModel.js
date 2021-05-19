@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bycrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 // const validator = require('validator');
 
 const userSchema = mongoose.Schema({
@@ -28,6 +28,7 @@ const userSchema = mongoose.Schema({
 			message: 'Invalid passowrd',
 		},
 		required: [true, 'password must be set'],
+		select: false, //not shown when select is call
 	},
 	passwordConfirm: {
 		type: String,
@@ -57,16 +58,20 @@ function passwordValidator(password) {
 }
 
 /** Middleware */
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) return next();
 
 	// 12 is the number of complex encrypt, if we set more than that, the cpu will wait more to encrypt it
-	this.password = bycrypt.hash(this.password, 12);
+	this.password = await bcrypt.hash(this.password, 12);
 
 	// We don't want to persiste the password confirmation to our database
 	this.passwordConfirm = undefined;
 	next();
 });
+
+userSchema.methods.correctPassword = async function(password, currentPassword) {
+	return await bcrypt.compare(password, currentPassword);
+}
 
 const User = mongoose.model('User', userSchema);
 
