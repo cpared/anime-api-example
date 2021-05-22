@@ -1,6 +1,6 @@
+require('dotenv').config();
 const app = require('./app');
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 //Catch every programing error and stop the app
 process.on('uncaughtException', (err) => {
@@ -22,9 +22,7 @@ mongoose
 		useFindAndModify: false,
 		useUnifiedTopology: true,
 	})
-	.then(() =>
-		console.log('DB connection success!')
-	);
+	.then(() => console.log('DB connection success!'));
 
 const server = app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);

@@ -40,9 +40,15 @@ const userSchema = mongoose.Schema({
 			message: 'Password does not match',
 		},
 	},
+	role: {
+		type: String,
+		enum: ['user', 'admin'],
+		default: 'user',
+	},
 	photo: {
 		type: String,
 	},
+	passwordChangedAt: Date,
 });
 
 /** Validators */
@@ -69,9 +75,24 @@ userSchema.pre('save', async function (next) {
 	next();
 });
 
-userSchema.methods.correctPassword = async function(password, currentPassword) {
+userSchema.methods.correctPassword = async function (
+	password,
+	currentPassword,
+) {
 	return await bcrypt.compare(password, currentPassword);
-}
+};
+
+userSchema.methods.changedPasswordAfter = function (JWTtimestamp) {
+	if (this.passwordChangedAt) {
+		console.log(this.passwordChangedAt);
+		const changedTimestamp = parseInt(
+			this.passwordChangedAt.getTime() / 1000,
+			10,
+		);
+		return JWTtimestamp < changedTimestamp;
+	}
+	return false;
+};
 
 const User = mongoose.model('User', userSchema);
 
